@@ -10,7 +10,7 @@ import { fetchTweets } from '../utils/fetchTweets'
 interface Props{
   tweets:Tweet[]
 }
-
+//className="bg-red overflow-x-scroll"
 const Home = ({tweets}:Props) => {
   console.log(tweets)
   return (
