@@ -1,4 +1,4 @@
-// https://www.youtube.com/watch?v=rCselwxbUgA&t=8066s
+
 
 import React, { useEffect, useState } from 'react'
 import { Tweet, Comment } from '../typings'
@@ -89,7 +89,7 @@ function Tweet({ tweet }: Props) {
                 <div className="flex items-center space-x-1">
                   <p className="mr-1 font-bold">{comment.username}</p>
                   <p className="hidden text-sm text-gray-500 lg:inline ">
-                    {' '}
+                   
                     @{comment.username.replace(/\s+/g, '').toLowerCase()} .
                   </p>
                   <TimeAgo
