@@ -1,4 +1,10 @@
-import React, { useRef, useState } from 'react'
+import React, {
+  Dispatch,
+  MouseEvent,
+  SetStateAction,
+  useRef,
+  useState,
+} from 'react'
 import {
   CalendarIcon,
   EmojiHappyIcon,
@@ -8,8 +14,14 @@ import {
 } from '@heroicons/react/outline'
 import { useSession } from 'next-auth/react'
 import toast from 'react-hot-toast'
+import { TweetBody, Tweet } from '../typings'
+import { fetchTweets } from '../utils/fetchTweets'
 
-function TweetBox() {
+interface Props {
+  setTweets: Dispatch<SetStateAction<Tweet[]>>
+}
+
+function TweetBox({ setTweets }: Props) {
   const [input, setInput] = useState<string>('')
   const [image, setImage] = useState<string>('')
   const imageInputRef = useRef<HTMLInputElement>(null)
@@ -18,7 +30,7 @@ function TweetBox() {
   const [imageUrlBoxIsOpen, setImageBoxUrlIsOpen] = useState<boolean>(false)
 
   const addImageToTweet = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    e: React.MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
   ) => {
     e.preventDefault()
     //to prevent page from refreshing because of being inside form
@@ -30,6 +42,41 @@ function TweetBox() {
 
     setImage(imageInputRef.current.value)
     imageInputRef.current.value = ''
+    setImageBoxUrlIsOpen(false)
+  }
+
+  const postTweet = async () => {
+    const tweetInfo: TweetBody = {
+      text: input,
+      username: session?.user?.name || 'unknown User',
+      profileImg: session?.user?.image || 'https://links.papareact.com/gll',
+      image: image,
+    }
+
+    const result = await fetch(`/api/addTweet`, {
+      body: JSON.stringify(tweetInfo),
+      method: 'POST',
+    })
+
+    const json = await result.json()
+
+    const newTweets = await fetchTweets()
+    setTweets(newTweets)
+
+    toast('Tweet Posted', {
+      icon: '🎆',
+    })
+  }
+
+  const handleSubmit = (
+    e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
+  ) => {
+    e.preventDefault()
+    //to prevent page from refreshing because of being inside form
+    postTweet()
+
+    setInput('')
+    setImage('')
     setImageBoxUrlIsOpen(false)
   }
 
@@ -63,6 +110,7 @@ function TweetBox() {
               <LocationMarkerIcon className="h-5 w-5 cursor-pointer transition-transform duration-200 ease-out hover:scale-150" />
             </div>
             <button
+              onClick={handleSubmit}
               disabled={!input || !session}
               className=" rounded-full bg-twitter px-5  py-2 font-bold text-white disabled:opacity-40"
             >
