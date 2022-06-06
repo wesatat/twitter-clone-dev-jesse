@@ -46,7 +46,7 @@ function Tweet({ tweet }: Props) {
       method: 'POST',
     })
 
-    console.log('WOOHOO we made it', result)
+    console.log('Comment posted in api', result)
     toast.success('Comment Posted!', {
       id: commentToast,
     })

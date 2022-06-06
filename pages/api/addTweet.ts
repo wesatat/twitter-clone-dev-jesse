@@ -35,6 +35,7 @@ export default async function handler(
     headers: {
       'content-type': 'application/json',
       Authorization: `Bearer ${process.env.SANITY_API_TOKEN}`,
+      'Access-Control-Allow-Origin': '*',
     },
     body: JSON.stringify(mutations),
     method: 'POST',
