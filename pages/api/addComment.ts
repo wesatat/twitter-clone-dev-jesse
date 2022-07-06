@@ -1,6 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { CommentBody } from '../../typings'
+import { text } from 'stream/consumers'
 
 type Data = {
   message: string
@@ -35,9 +36,7 @@ export default async function handler(
   const result = await fetch(apiEndpoint,{
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${process.env.SANITY_API_TOKEN}`,
-      'Access-Control-Allow-Origin': '*',
-     
+      Authorization: `Bearer ${process.env.SANITY_API_TOKEN}`, 
     },
     body: JSON.stringify(mutations),
     method: 'POST',

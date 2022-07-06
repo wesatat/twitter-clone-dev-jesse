@@ -6,6 +6,7 @@ import SideBar from '../components/SideBar'
 import Widgets from '../components/Widgets'
 import { Tweet } from '../typings'
 import { fetchTweets } from '../utils/fetchTweets'
+import { useSession, signIn, signOut, getSession } from 'next-auth/react'
 //<link rel="icon" href="/favicon.ico" />
 
 interface Props{
@@ -37,10 +38,11 @@ export default Home
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const tweets = await fetchTweets()
-
+  const session = await getSession(context)
   return {
     props: {
       tweets,
+      session,
     },
   }
 }
