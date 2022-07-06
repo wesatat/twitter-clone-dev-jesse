@@ -19,9 +19,10 @@ import { fetchTweets } from '../utils/fetchTweets'
 
 interface Props {
   setTweets: Dispatch<SetStateAction<Tweet[]>>
+  setIsFetching: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-function TweetBox({ setTweets }: Props) {
+function TweetBox({ setTweets,setIsFetching }: Props) {
   const [input, setInput] = useState<string>('')
   const [image, setImage] = useState<string>('')
   const imageInputRef = useRef<HTMLInputElement>(null)
@@ -66,6 +67,7 @@ function TweetBox({ setTweets }: Props) {
     toast('Tweet Posted', {
       icon: '🎆',
     })
+    return json
   }
 
   const handleSubmit = (
@@ -73,11 +75,12 @@ function TweetBox({ setTweets }: Props) {
   ) => {
     e.preventDefault()
     //to prevent page from refreshing because of being inside form
+    setIsFetching(true)
     postTweet()
-
     setInput('')
     setImage('')
     setImageBoxUrlIsOpen(false)
+    setIsFetching(false)
   }
 
   return (

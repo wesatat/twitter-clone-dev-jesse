@@ -12,10 +12,13 @@ interface Props {
 
 function Feed({ tweets: tweetsProp }: Props) {
   const [tweets, setTweets] = useState<Tweet[]>(tweetsProp)
+  const [isFetching, setIsFetching] = useState(false)
   const handleRefresh = async () => {
+    setIsFetching(true)
     const refreshToast = toast.loading('Refreshing...')
     const tweets = await fetchTweets()
     setTweets(tweets)
+    setIsFetching(false)
     toast.success('Feed Updated!', {
       id: refreshToast,
     })
@@ -27,13 +30,13 @@ function Feed({ tweets: tweetsProp }: Props) {
         <h1 className="p-5 pb-0 text-xl font-bold">Home</h1>
         <RefreshIcon
           onClick={handleRefresh}
-          className=" mt-5h-8 duration 500 mr-5 w-8 
-        cursor-pointer text-twitter transition-all duration-500 ease-out 
-        hover:rotate-180 active:scale-125"
+          className={`mr-5 mt-5 h-8 w-8 cursor-pointer text-twitter transition-all duration-500 ease-out hover:rotate-180 active:scale-125 ${
+            isFetching ? 'animate-spin' : 'animate-none'
+          }`}
         />
       </div>
       <div>
-        <TweetBox setTweets={setTweets} />
+        <TweetBox setIsFetching={setIsFetching} setTweets={setTweets} />
       </div>
 
       <div>

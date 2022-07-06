@@ -34,7 +34,7 @@ export default async function handler(
 
   const result = await fetch(apiEndpoint,{
     headers: {
-      'content-type': 'application/json',
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${process.env.SANITY_API_TOKEN}`,
       'Access-Control-Allow-Origin': '*',
      
